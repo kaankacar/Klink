@@ -25,7 +25,7 @@ export const env: z.infer<typeof envSchema> = parsed.success
       PUBLIC_STELLAR_NETWORK_PASSPHRASE: "Test SDF Network ; September 2015",
       PUBLIC_STELLAR_RPC_URL: "https://soroban-testnet.stellar.org",
       PUBLIC_STELLAR_HORIZON_URL: "https://horizon-testnet.stellar.org",
-      PUBLIC_KALE_CONTRACT_ID: "CDSWUUXGPWDZG76ISK6SUCVPZJMD5YUV66J2FXFXFGDX25XKZJIEITAO",
+      PUBLIC_KALE_CONTRACT_ID: "CAAVU2UQJLMZ3GUZFM56KVNHLPA3ZSSNR4VP2U53YBXFD2GI3QLIVHZZ",
       PUBLIC_ORIGIN_DOMAIN: "localhost:5173",
       NEXT_PUBLIC_RPC_URL: "https://soroban-testnet.stellar.org",
       NEXT_PUBLIC_EXPLORER_BASE: "https://stellar.expert/explorer/testnet",
