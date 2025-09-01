@@ -7,7 +7,7 @@ import { env, networkPassphrase, rpcUrl, explorerBase } from "./env";
 export const server = new rpc.Server(rpcUrl, { allowHttp: true });
 
 export const getNetwork = () => {
-  switch (env.PUBLIC_STELLAR_NETWORK) {
+  switch (env.VITE_PUBLIC_STELLAR_NETWORK) {
     case "PUBLIC":
       return Networks.PUBLIC;
     case "TESTNET":
