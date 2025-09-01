@@ -83,8 +83,14 @@ const Airdrop: React.FC = () => {
         // Create SEP-7 deep link
         const sep7Url = `web+stellar:tx?xdr=${encodeURIComponent(xdr)}&origin_domain=${encodeURIComponent(window.location.hostname)}`;
         
-        // Redirect to wallet
-        window.location.href = sep7Url;
+        // Try to redirect to wallet, with fallback
+        try {
+          window.location.href = sep7Url;
+        } catch (err) {
+          // If SEP-7 fails, show manual options
+          setError(`Wallet redirect failed. You can manually import this transaction XDR: ${xdr}`);
+          setIsRedirecting(false);
+        }
         
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to create wallet link");
@@ -284,8 +290,11 @@ const Airdrop: React.FC = () => {
                     <Text as="h3" size="lg" weight="medium" style={{ marginBottom: "0.5rem" }}>
                       Wallet Connected!
                     </Text>
-                    <Text as="p" size="md" color="secondary">
+                    <Text as="p" size="md" color="secondary" style={{ marginBottom: "1rem" }}>
                       Preparing your KALE claim...
+                    </Text>
+                    <Text as="p" size="sm" color="secondary">
+                      If your wallet doesn't open automatically, make sure you have Freighter installed and updated.
                     </Text>
                   </div>
                 </Card>
