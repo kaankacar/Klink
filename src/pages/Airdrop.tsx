@@ -13,7 +13,6 @@ interface AirdropData {
 }
 
 const Airdrop: React.FC = () => {
-  console.log("Airdrop component rendering...");
   
   const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
@@ -21,21 +20,18 @@ const Airdrop: React.FC = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const { address: connectedWallet } = useWallet();
 
+  // Add a fallback state for debugging
+  const [isLoading, setIsLoading] = useState(true);
+
   // Load airdrop data from URL parameters
   useEffect(() => {
-    console.log("Airdrop page loading...");
-    console.log("URL search params:", window.location.search);
-    
     try {
       const from = searchParams.get("from");
       const amount = searchParams.get("amount");
       const memo = searchParams.get("memo") || undefined;
       const maxClaims = searchParams.get("maxClaims");
 
-      console.log("Parsed params:", { from, amount, memo, maxClaims });
-
       if (!from || !amount) {
-        console.log("Missing required parameters");
         setError("Invalid airdrop link - missing required parameters");
         return;
       }
@@ -63,6 +59,8 @@ const Airdrop: React.FC = () => {
       setError(null);
     } catch (err) {
       setError("Invalid airdrop parameters");
+    } finally {
+      setIsLoading(false);
     }
   }, [searchParams]);
 
@@ -98,6 +96,24 @@ const Airdrop: React.FC = () => {
     const timer = setTimeout(redirectToWallet, 1500);
     return () => clearTimeout(timer);
   }, [airdropData, connectedWallet, isRedirecting]);
+
+  if (isLoading) {
+    return (
+      <>
+        <SocialPreview />
+        <Layout.Content>
+          <Layout.Inset>
+            <div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
+              <Loader size="lg" />
+              <Text as="span" size="md" style={{ marginLeft: "1rem" }}>
+                Loading airdrop...
+              </Text>
+            </div>
+          </Layout.Inset>
+        </Layout.Content>
+      </>
+    );
+  }
 
   if (error) {
     return (
