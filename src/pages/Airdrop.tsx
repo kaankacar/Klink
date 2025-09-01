@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Layout, Text, Alert, Loader, Button, Card, Icon } from "@stellar/design-system";
 import { SocialPreview } from "../components/SocialPreview";
 import { buildTransferXdr } from "../lib/kale";
@@ -17,7 +17,7 @@ interface AirdropData {
 
 const Airdrop: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [searchParams] = useSearchParams();
+  // const [searchParams] = useSearchParams(); // Not used in this implementation
   const [error, setError] = useState<string | null>(null);
   const [airdropData, setAirdropData] = useState<AirdropData | null>(null);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -105,6 +105,7 @@ const Airdrop: React.FC = () => {
               
               <Button
                 variant="secondary"
+                size="md"
                 onClick={() => window.location.href = "/"}
                 style={{ marginTop: "1rem" }}
               >
@@ -155,7 +156,7 @@ const Airdrop: React.FC = () => {
                     gap: "0.5rem",
                     marginBottom: "1rem"
                   }}>
-                    <Icon.Gift size="md" />
+                    <Icon.Gift01 size="md" />
                     <Text as="h3" size="lg" weight="medium">Claim Details</Text>
                   </div>
                   

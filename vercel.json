@@ -1,0 +1,21 @@
+{
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "env": {
+    "VITE_PUBLIC_STELLAR_NETWORK": "TESTNET",
+    "VITE_PUBLIC_STELLAR_NETWORK_PASSPHRASE": "Test SDF Network ; September 2015",
+    "VITE_PUBLIC_STELLAR_RPC_URL": "https://soroban-testnet.stellar.org",
+    "VITE_PUBLIC_STELLAR_HORIZON_URL": "https://horizon-testnet.stellar.org",
+    "VITE_PUBLIC_KALE_CONTRACT_ID": "CDSWUUXGPWDZG76ISK6SUCVPZJMD5YUV66J2FXFXFGDX25XKZJIEITAO",
+    "VITE_NEXT_PUBLIC_RPC_URL": "https://soroban-testnet.stellar.org",
+    "VITE_NEXT_PUBLIC_EXPLORER_BASE": "https://stellar.expert/explorer/testnet"
+  }
+}

@@ -96,8 +96,8 @@ const Home: React.FC = () => {
   return (
     <>
       <SocialPreview isHomePage={true} />
-      <Layout.Content>
-        <Layout.Inset>
+  <Layout.Content>
+    <Layout.Inset>
         <div style={{ maxWidth: "600px", margin: "0 auto", padding: "2rem 0" }}>
           {/* Header */}
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -127,7 +127,7 @@ const Home: React.FC = () => {
                   Please connect your wallet using the button in the top-right corner to create airdrop links.
                   People will claim KALE tokens directly from your connected wallet.
                 </Text>
-                <Alert variant="info" placement="inline">
+                <Alert variant="primary" placement="inline">
                   <Text as="span" size="sm">
                     👆 Look for the "Connect Account" button in the header above
                   </Text>
@@ -220,9 +220,11 @@ const Home: React.FC = () => {
                 </div>
 
                 {error && (
-                  <Alert variant="error" placement="inline" style={{ marginTop: "1rem" }}>
-                    {error}
-                  </Alert>
+                  <div style={{ marginTop: "1rem" }}>
+                    <Alert variant="error" placement="inline">
+                      {error}
+                    </Alert>
+                  </div>
                 )}
               </div>
             </Card>
@@ -300,10 +302,10 @@ const Home: React.FC = () => {
             </Text>
           </div>
         </div>
-        </Layout.Inset>
-      </Layout.Content>
+    </Layout.Inset>
+  </Layout.Content>
     </>
-  );
+);
 };
 
 export default Home;
