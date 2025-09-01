@@ -13,6 +13,8 @@ interface AirdropData {
 }
 
 const Airdrop: React.FC = () => {
+  console.log("Airdrop component rendering...");
+  
   const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [airdropData, setAirdropData] = useState<AirdropData | null>(null);
@@ -21,13 +23,19 @@ const Airdrop: React.FC = () => {
 
   // Load airdrop data from URL parameters
   useEffect(() => {
+    console.log("Airdrop page loading...");
+    console.log("URL search params:", window.location.search);
+    
     try {
       const from = searchParams.get("from");
       const amount = searchParams.get("amount");
       const memo = searchParams.get("memo") || undefined;
       const maxClaims = searchParams.get("maxClaims");
 
+      console.log("Parsed params:", { from, amount, memo, maxClaims });
+
       if (!from || !amount) {
+        console.log("Missing required parameters");
         setError("Invalid airdrop link - missing required parameters");
         return;
       }

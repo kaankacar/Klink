@@ -39,6 +39,9 @@ export const buildTransferXdr = async ({
   memo,
 }: TransferParams): Promise<string> => {
   try {
+    console.log("Building transfer XDR with params:", { fromPubKey, toPubKey, amount, memo });
+    console.log("KALE Contract ID:", kaleContractId);
+    
     // Get the source account
     const sourceAccount = await getAccount(fromPubKey);
     
@@ -49,8 +52,9 @@ export const buildTransferXdr = async ({
     const amountStroops = toKaleStroops(amount);
     
     // Build the transfer operation
+    // For Soroban Asset Contract (SAC), try different function names
     const transferOp = contract.call(
-      "transfer",
+      "transfer",  // Standard token interface
       Address.fromString(fromPubKey).toScVal(),
       Address.fromString(toPubKey).toScVal(),
       nativeToScVal(amountStroops, { type: "i128" })

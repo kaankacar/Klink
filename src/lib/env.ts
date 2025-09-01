@@ -10,7 +10,7 @@ const envSchema = z.object({
   PUBLIC_STELLAR_NETWORK_PASSPHRASE: z.string().default("Test SDF Network ; September 2015"),
   PUBLIC_STELLAR_RPC_URL: z.string().default("https://soroban-testnet.stellar.org"),
   PUBLIC_STELLAR_HORIZON_URL: z.string().default("https://horizon-testnet.stellar.org"),
-  PUBLIC_KALE_CONTRACT_ID: z.string().default("CDSWUUXGPWDZG76ISK6SUCVPZJMD5YUV66J2FXFXFGDX25XKZJIEITAO"),
+  PUBLIC_KALE_CONTRACT_ID: z.string().default("CAAVU2UQJLMZ3GUZFM56KVNHLPA3ZSSNR4VP2U53YBXFD2GI3QLIVHZZ"),
   PUBLIC_ORIGIN_DOMAIN: z.string().default("localhost:5173"),
   NEXT_PUBLIC_RPC_URL: z.string().default("https://soroban-testnet.stellar.org"),
   NEXT_PUBLIC_EXPLORER_BASE: z.string().default("https://stellar.expert/explorer/testnet"),
