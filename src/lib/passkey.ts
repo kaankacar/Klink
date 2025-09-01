@@ -1,13 +1,11 @@
 import { PasskeyKit } from "passkey-kit";
 import { rpcUrl, networkPassphrase } from "./env";
 
-// Wallet WASM hash for smart wallet deployment (from Passkey Kit docs)
-const WALLET_WASM_HASH = "4b9b2c3c9b6b0d9c8e7f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1";
-
+// Initialize PasskeyKit without walletWasmHash to use the default
+// The fake hash was causing XDR encoding errors (34 bytes vs 32 expected)
 export const passkeyKit = new PasskeyKit({
   rpcUrl,
   networkPassphrase,
-  walletWasmHash: WALLET_WASM_HASH,
 });
 
 export interface PasskeyAccount {
@@ -20,15 +18,33 @@ export interface PasskeyAccount {
  */
 export const createPasskeyAccount = async (app: string, user: string): Promise<PasskeyAccount> => {
   try {
+    console.log("Creating passkey account with:", { app, user, rpcUrl, networkPassphrase });
+    
     // This will prompt the user to create a passkey (Face ID, Touch ID, etc.)
     const account = await passkeyKit.createWallet(app, user);
+    
+    console.log("Passkey account created successfully:", account);
     
     return {
       contractId: account.contractId,
       keyId: account.keyIdBase64,
     };
   } catch (error) {
-    console.error("Failed to create passkey account:", error);
+    console.error("Failed to create passkey account - detailed error:", error);
+    
+    // Provide more specific error messages based on common issues
+    if (error instanceof Error) {
+      if (error.message.includes("XDR")) {
+        throw new Error("Configuration error: Invalid network settings. Please try again or contact support.");
+      } else if (error.message.includes("User cancelled") || error.message.includes("NotAllowedError")) {
+        throw new Error("Passkey creation was cancelled. Please try again and allow the passkey creation.");
+      } else if (error.message.includes("NotSupportedError")) {
+        throw new Error("Passkeys are not supported on this device or browser. Please use a compatible device.");
+      } else {
+        throw new Error(`Failed to create passkey account: ${error.message}`);
+      }
+    }
+    
     throw new Error("Failed to create passkey account. Please try again.");
   }
 };

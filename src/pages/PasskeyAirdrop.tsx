@@ -78,7 +78,9 @@ const PasskeyAirdrop: React.FC = () => {
       // Automatically start claiming process
       await handleClaim(account);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create wallet");
+      console.error("Wallet creation error:", err);
+      const errorMessage = err instanceof Error ? err.message : "Failed to create wallet";
+      setError(errorMessage);
     } finally {
       setIsCreatingWallet(false);
     }
