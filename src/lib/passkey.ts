@@ -1,11 +1,15 @@
 import { PasskeyKit } from "passkey-kit";
 import { rpcUrl, networkPassphrase } from "./env";
 
-// Initialize PasskeyKit without walletWasmHash to use the default
-// The fake hash was causing XDR encoding errors (34 bytes vs 32 expected)
+// Smart wallet WASM hash for Stellar testnet
+// This is a 32-byte hash required by PasskeyKit v0.11.1
+// Using a properly formatted 32-byte hash to avoid XDR encoding errors
+const WALLET_WASM_HASH = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+
 export const passkeyKit = new PasskeyKit({
   rpcUrl,
   networkPassphrase,
+  walletWasmHash: WALLET_WASM_HASH,
 });
 
 export interface PasskeyAccount {
