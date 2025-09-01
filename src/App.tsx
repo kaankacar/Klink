@@ -5,6 +5,7 @@ import { Routes, Route, Outlet, NavLink } from "react-router-dom";
 import Home from "./pages/Home";
 import Send from "./pages/Send";
 import Airdrop from "./pages/Airdrop";
+import PasskeyAirdrop from "./pages/PasskeyAirdrop";
 import Debugger from "./pages/Debugger.tsx";
 
 const AppLayout: React.FC = () => (
@@ -62,6 +63,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/send" element={<Send />} />
         <Route path="/airdrop" element={<Airdrop />} />
+        <Route path="/passkey-airdrop" element={<PasskeyAirdrop />} />
         <Route path="/debug" element={<Debugger />} />
         <Route path="/debug/:contractName" element={<Debugger />} />
       </Route>

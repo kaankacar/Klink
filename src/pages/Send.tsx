@@ -4,7 +4,7 @@ import { Layout, Text, Alert, Loader } from "@stellar/design-system";
 import { parseUrlParams } from "../lib/validation";
 import { SocialPreview } from "../components/SocialPreview";
 import { buildTransferXdr } from "../lib/kale";
-import { submitAndPollTransaction } from "../lib/submit";
+import { submitTransaction } from "../lib/submit";
 import { useAppStore } from "../lib/store";
 import { ParamPreview } from "../components/ParamPreview";
 import { WalletChooser } from "../components/WalletChooser";
@@ -73,7 +73,7 @@ const Send: React.FC = () => {
       setError(null);
       setSubmitting(true);
       
-      const result = await submitAndPollTransaction(signedXdr);
+      const result = await submitTransaction(signedXdr);
       setSubmissionResult(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit transaction");

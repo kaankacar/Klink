@@ -24,6 +24,7 @@
     "@stellar/stellar-xdr-json": "^22.0.0-rc.1.1",
     "@tanstack/react-query": "^5.80.7",
     "lossless-json": "^4.1.0",
+    "passkey-kit": "^0.11.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-helmet-async": "^2.0.5",

@@ -1,5 +1,5 @@
 import { TransactionBuilder } from "@stellar/stellar-sdk";
-import { submitTransaction, pollTransactionStatus, getTransactionUrl, getNetwork } from "./stellar";
+import { submitTransaction as stellarSubmitTransaction, pollTransactionStatus, getTransactionUrl, getNetwork } from "./stellar";
 
 export interface SubmissionResult {
   success: boolean;
@@ -8,7 +8,7 @@ export interface SubmissionResult {
   error?: string;
 }
 
-export const submitAndPollTransaction = async (
+export const submitTransaction = async (
   signedXdr: string
 ): Promise<SubmissionResult> => {
   try {
@@ -16,7 +16,7 @@ export const submitAndPollTransaction = async (
     const transaction = TransactionBuilder.fromXDR(signedXdr, getNetwork());
     
     // Submit the transaction
-    const submitResponse = await submitTransaction(transaction);
+    const submitResponse = await stellarSubmitTransaction(transaction);
     
     if (submitResponse.status === "ERROR") {
       return {

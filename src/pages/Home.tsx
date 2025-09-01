@@ -40,16 +40,16 @@ const Home: React.FC = () => {
         throw new Error("Please connect your wallet first");
       }
       
-      // Create shareable link with all parameters in URL (no localStorage needed)
-      const url = new URL(`/airdrop`, window.location.origin);
-      url.searchParams.set("from", connectedWallet);
-      url.searchParams.set("amount", formData.amount);
-      if (formData.memo) {
-        url.searchParams.set("memo", formData.memo);
-      }
-      if (maxClaims) {
-        url.searchParams.set("maxClaims", maxClaims.toString());
-      }
+                    // Create shareable link with all parameters in URL (using passkey airdrop)
+              const url = new URL(`/passkey-airdrop`, window.location.origin);
+              url.searchParams.set("from", connectedWallet);
+              url.searchParams.set("amount", formData.amount);
+              if (formData.memo) {
+                url.searchParams.set("memo", formData.memo);
+              }
+              if (maxClaims) {
+                url.searchParams.set("maxClaims", maxClaims.toString());
+              }
       
       setGeneratedLink(url.toString());
       setError(null);
