@@ -61,7 +61,7 @@ function App() {
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/send" element={<Send />} />
-        <Route path="/airdrop/:id" element={<Airdrop />} />
+        <Route path="/airdrop" element={<Airdrop />} />
         <Route path="/debug" element={<Debugger />} />
         <Route path="/debug/:contractName" element={<Debugger />} />
       </Route>

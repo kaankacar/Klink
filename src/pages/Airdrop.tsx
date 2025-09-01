@@ -1,55 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Layout, Text, Alert, Loader, Button, Card, Icon } from "@stellar/design-system";
 import { SocialPreview } from "../components/SocialPreview";
 import { buildTransferXdr } from "../lib/kale";
-import { useAppStore } from "../lib/store";
+import { useWallet } from "../hooks/useWallet";
 
 interface AirdropData {
-  id: string;
   from: string;
   amount: string;
   memo?: string;
   maxClaims?: number;
-  createdAt: number;
-  claimedCount: number;
 }
 
 const Airdrop: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  // const [searchParams] = useSearchParams(); // Not used in this implementation
+  const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [airdropData, setAirdropData] = useState<AirdropData | null>(null);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const { connectedWallet } = useAppStore();
+  const { address: connectedWallet } = useWallet();
 
-  // Load airdrop data on mount
+  // Load airdrop data from URL parameters
   useEffect(() => {
-    if (!id) {
-      setError("Invalid airdrop link");
-      return;
-    }
-
     try {
-      const stored = localStorage.getItem(`airdrop_${id}`);
-      if (!stored) {
-        setError("Airdrop not found or expired");
+      const from = searchParams.get("from");
+      const amount = searchParams.get("amount");
+      const memo = searchParams.get("memo") || undefined;
+      const maxClaims = searchParams.get("maxClaims");
+
+      if (!from || !amount) {
+        setError("Invalid airdrop link - missing required parameters");
         return;
       }
 
-      const data: AirdropData = JSON.parse(stored);
-      
-      // Check if airdrop has reached max claims
-      if (data.maxClaims && data.claimedCount >= data.maxClaims) {
-        setError("This airdrop has reached its maximum number of claims");
+      // Basic validation
+      if (!from.match(/^G[A-Z2-7]{55}$/)) {
+        setError("Invalid sender address format");
         return;
       }
+
+      const amountNum = parseFloat(amount);
+      if (isNaN(amountNum) || amountNum <= 0) {
+        setError("Invalid airdrop amount");
+        return;
+      }
+
+      const data: AirdropData = {
+        from,
+        amount,
+        memo,
+        maxClaims: maxClaims ? parseInt(maxClaims) : undefined,
+      };
 
       setAirdropData(data);
+      setError(null);
     } catch (err) {
-      setError("Invalid airdrop data");
+      setError("Invalid airdrop parameters");
     }
-  }, [id]);
+  }, [searchParams]);
 
   // Auto-redirect to wallet when user connects
   useEffect(() => {
@@ -70,13 +77,6 @@ const Airdrop: React.FC = () => {
         // Create SEP-7 deep link
         const sep7Url = `web+stellar:tx?xdr=${encodeURIComponent(xdr)}&origin_domain=${encodeURIComponent(window.location.hostname)}`;
         
-        // Update claim count (in production, this would be done on the backend after successful tx)
-        const updatedData = {
-          ...airdropData,
-          claimedCount: airdropData.claimedCount + 1
-        };
-        localStorage.setItem(`airdrop_${id}`, JSON.stringify(updatedData));
-        
         // Redirect to wallet
         window.location.href = sep7Url;
         
@@ -89,7 +89,7 @@ const Airdrop: React.FC = () => {
     // Small delay to show the page briefly before redirecting
     const timer = setTimeout(redirectToWallet, 1500);
     return () => clearTimeout(timer);
-  }, [airdropData, connectedWallet, isRedirecting, id]);
+  }, [airdropData, connectedWallet, isRedirecting]);
 
   if (error) {
     return (
@@ -198,10 +198,10 @@ const Airdrop: React.FC = () => {
                     {airdropData.maxClaims && (
                       <div>
                         <Text as="span" size="sm" weight="medium" color="secondary">
-                          Claims Remaining
+                          Limited Airdrop
                         </Text>
                         <Text as="p" size="md">
-                          {airdropData.maxClaims - airdropData.claimedCount} of {airdropData.maxClaims}
+                          Max {airdropData.maxClaims} claims available
                         </Text>
                       </div>
                     )}
@@ -241,8 +241,8 @@ const Airdrop: React.FC = () => {
                       variant="primary"
                       size="lg"
                       onClick={() => {
-                        // This would trigger wallet connection - for now just show message
-                        alert("Please connect your wallet using the Freighter extension or other Stellar wallet");
+                        // Redirect to home page to connect wallet
+                        window.location.href = "/?connect=true";
                       }}
                     >
                       Connect Wallet

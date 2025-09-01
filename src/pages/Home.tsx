@@ -40,24 +40,16 @@ const Home: React.FC = () => {
         throw new Error("Please connect your wallet first");
       }
       
-      // Generate a unique airdrop ID
-      const airdropId = Math.random().toString(36).substring(2, 15);
-      
-      // Store airdrop details in localStorage (in production, this would be a backend)
-      const airdropData = {
-        id: airdropId,
-        from: connectedWallet,
-        amount: formData.amount,
-        memo: formData.memo || undefined,
-        maxClaims: maxClaims || undefined,
-        createdAt: Date.now(),
-        claimedCount: 0
-      };
-      
-      localStorage.setItem(`airdrop_${airdropId}`, JSON.stringify(airdropData));
-      
-      // Create shareable link
-      const url = new URL(`/airdrop/${airdropId}`, window.location.origin);
+      // Create shareable link with all parameters in URL (no localStorage needed)
+      const url = new URL(`/airdrop`, window.location.origin);
+      url.searchParams.set("from", connectedWallet);
+      url.searchParams.set("amount", formData.amount);
+      if (formData.memo) {
+        url.searchParams.set("memo", formData.memo);
+      }
+      if (maxClaims) {
+        url.searchParams.set("maxClaims", maxClaims.toString());
+      }
       
       setGeneratedLink(url.toString());
       setError(null);
